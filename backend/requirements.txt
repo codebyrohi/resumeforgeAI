@@ -1,0 +1,33 @@
+fastapi>=0.115
+uvicorn[standard]>=0.30
+gunicorn>=22.0
+pydantic>=2.7
+pydantic-settings>=2.3
+email-validator>=2.1
+python-multipart>=0.0.9
+
+# Database
+SQLAlchemy>=2.0.30
+alembic>=1.13
+PyMySQL>=1.1
+cryptography>=42.0  # needed by PyMySQL for MySQL 8 caching_sha2_password
+
+# Auth (bcrypt pinned: passlib 1.7.4 breaks with bcrypt>=4.1)
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1
+PyJWT>=2.8
+
+# Integrations
+boto3>=1.34
+groq>=0.9
+
+# File handling + rendering
+pypdf>=4.2
+python-docx>=1.1
+Pillow>=10.3
+Jinja2>=3.1
+playwright>=1.44
+
+# Tests
+pytest>=8.2
+httpx>=0.27

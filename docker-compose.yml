@@ -1,0 +1,45 @@
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: resume_builder
+      MYSQL_USER: resume
+      MYSQL_PASSWORD: resume
+    ports:
+      - "127.0.0.1:${MYSQL_HOST_PORT:-3307}:3306"  # this PC only; containers still use mysql:3306
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-proot"]  # TCP, not socket: the init-time server has no networking
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  backend:
+    restart: on-failure
+    build: ./backend
+    env_file: .env
+    environment:
+      DATABASE_URL: mysql+pymysql://resume:resume@mysql:3306/resume_builder
+    ports:
+      - "8000:8000"
+    volumes:
+      - local_storage:/app/local_storage
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8000}
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:
+  local_storage:

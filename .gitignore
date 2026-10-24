@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+backend/local_storage/
+
+# Node
+node_modules/
+frontend/dist/
+
+# Env / secrets
+.env
+*.env.local
